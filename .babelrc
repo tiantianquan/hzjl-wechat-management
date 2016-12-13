@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "es2015",
+    "react"
+  ],
+  "plugins": [
+    [
+      "import",
+      {
+        "style": "css", // 'less',
+        "libraryName": "antd"
+      }
+    ],
+    "transform-object-rest-spread",
+    "transform-async-to-generator"
+  ]
+}

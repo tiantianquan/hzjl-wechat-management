@@ -1,0 +1,16 @@
+.container,#app,.main-view-wrapper{
+  height: 100%;
+}
+
+.side-menu-wrapper{
+  height: 100%;
+  width: 240px;
+  float: left;
+}
+.content-wrapper{
+  margin-left: 240px;
+  // height: 100%;
+}
+.edit-input{
+  height: 50px !important;
+}

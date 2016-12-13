@@ -1,0 +1,9 @@
+{
+  "extends": "react-app",
+  "rules": {
+    "no-extra-semi": 2,
+    "semi": "off"
+  }
+
+  // Map from global var to bool specifying if it can be 
+}
