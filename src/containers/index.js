@@ -1,9 +1,9 @@
 import MainView from './mainView.jsx'
-import WxKeyListView from './wxKeyListView.jsx' 
-import WxKeyEditView from './wxKeyEditView.jsx' 
+import WechatAccountListView from './WechatAccountListView.jsx' 
+import WechatAccountEditView from './WechatAccountEditView.jsx' 
 
 export {
   MainView,
-  WxKeyListView,
-  WxKeyEditView
+  WechatAccountListView,
+  WechatAccountEditView
 }

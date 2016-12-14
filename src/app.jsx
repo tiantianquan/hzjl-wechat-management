@@ -7,7 +7,7 @@ import thunk from 'redux-thunk'
 import { Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
-import { MainView, WxKeyListView, WxKeyEditView } from './containers'
+import { MainView, WechatAccountListView, WechatAccountEditView } from './containers'
 import rootReducer from './reducers'
 import './style/style.scss'
 
@@ -31,11 +31,11 @@ const routeConfig = [
     indexRoute: { component: null },
     childRoutes: [
       {
-        path: 'WxKeyList',
-        component: WxKeyListView,
+        path: 'WechatAccountList',
+        component: WechatAccountListView,
         childRoutes: [{
           path: 'Edit/:id',
-          component: WxKeyEditView
+          component: WechatAccountEditView
         }],
       },
       {

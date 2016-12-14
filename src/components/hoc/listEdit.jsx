@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Table, Modal, Button } from 'antd'
-import { Link, withRouter } from 'react-router'
+import { message } from 'antd'
+import { withRouter } from 'react-router'
 
 
 
@@ -17,16 +17,21 @@ const ListEdit = WrapComponent => {
       this.props.router.push({ pathname: this.props.location.state.returnTo })
     }
 
+
+
     componentWillReceiveProps(nextProps) {
-      if (!!nextProps.location.state && !!nextProps.location.state.modal) {
+      if (!!nextProps.location.state && !!nextProps.location.state.showModal) {
         this.setState({ showModal: true })
       } else {
         this.setState({ showModal: false })
       }
+
+
+
     }
 
     render() {
-      return <WrapComponent {...this.props} />
+      return <WrapComponent {...this.props} handleCancel={this.handleCancel} showModal={this.state.showModal} />
     }
   }
 

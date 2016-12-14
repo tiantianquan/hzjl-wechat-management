@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row, Col } from 'antd'
 import { SideMenu } from '../components'
 
 const MainView = React.createClass({

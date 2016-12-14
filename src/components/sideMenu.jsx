@@ -15,7 +15,7 @@ const SideMenu = withRouter(React.createClass({
       current: e.key,
     })
 
-    this.props.router.push(`/WxKeyList`)
+    this.props.router.push(`/WechatAccountList`)
   },
   render() {
     return (
