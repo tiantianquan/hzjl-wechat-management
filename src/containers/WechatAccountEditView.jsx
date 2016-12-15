@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, Spin, Button, message } from 'antd'
+import { Form, Input, Spin, Button } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import DetailEdit from '../components/hoc/detailEdit.jsx'
 
 import actions from '../actions'
 
@@ -27,16 +28,14 @@ import actions from '../actions'
    */
   mapPropsToFields(props) {
     let formData = {}
-    for (var k in props.wechatAccount) {
-      if (props.wechatAccount.hasOwnProperty(k)) {
+    for (var k in props.wechatAccountEdit) {
+      if (props.wechatAccountEdit.hasOwnProperty(k)) {
         formData[k] = {
-          value: props.wechatAccount[k]
+          value: props.wechatAccountEdit[k]
         }
       }
     }
     return formData
-
-
   }
 })
 class WechatAccountEditView extends Component {
@@ -48,118 +47,124 @@ class WechatAccountEditView extends Component {
   }
 
   _handleAdd = () => {
-    let addData = {
-      ...this.props.form.getFieldsValue()
-  }
-    this.props.actions.addWechatAccountStart(addData)
-  }
-
-_handleEdit = () => {
-  let {wechatAccount} = this.props
-  let updateData = {
-      ...wechatAccount,
-      ...this.props.form.getFieldsValue()
-}
-this.props.actions.updateWechatAccountStart(updateData)
+    let {form} = this.props
+    if (this.props.handleValidate(form)) {
+      let addData = {
+        ...this.props.form.getFieldsValue()
+      }
+      this.props.actions.addStart(addData)
+    }
   }
 
-_handleSubmit = (e) => {
-  e.preventDefault()
-  if (this.state.type === 'ADD')
-    this._handleAdd()
+  _handleEdit = () => {
+    let {form} = this.props
+    if (this.props.handleValidate(form)) {
+      let {wechatAccountEdit} = this.props
+      let updateData = {
+        ...wechatAccountEdit,
+        ...form.getFieldsValue()
+      }
+      this.props.actions.updateStart(updateData)
+    }
+  }
 
-  if (this.state.type === 'EDIT')
-    this._handleEdit()
-}
+  _handleSubmit = (e) => {
+    e.preventDefault()
+    if (this.state.type === 'ADD')
+      this._handleAdd()
 
-componentWillMount() {
-  if (this.state.type === 'EDIT')
-    this.props.actions.getWechatAccountStart(this.props.params.id)
-}
-componentWillUnmount() {
-  this.props.actions.clearWechatAccount(this.props.wechatAccount)
-}
+    if (this.state.type === 'EDIT')
+      this._handleEdit()
+  }
+
+  componentWillMount() {
+    if (this.state.type === 'EDIT')
+      this.props.actions.getStart(this.props.params.id)
+  }
+  componentWillUnmount() {
+    this.props.actions.clear(this.props.wechatAccountEdit)
+  }
 
 
-render() {
-  const { getFieldDecorator } = this.props.form
-  return (
-    <Spin spinning={this.props.isLoading}>
-      <Form horizontal
-        onSubmit={this._handleSubmit}>
-        <Form.Item
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          label="名称"
-          hasFeedback
-          className='edit-input'
-          >
-          {
-            getFieldDecorator('Name', {
+  render() {
+    const { getFieldDecorator } = this.props.form
+    return (
+      <Spin spinning={this.props.isLoading}>
+        <Form horizontal
+          onSubmit={this._handleSubmit}>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="名称"
+            hasFeedback
+            className='edit-input'
+            >
+            {
+              getFieldDecorator('Name', {
+                rules: [{ required: true, message: '必填' }]
+              })(
+                <Input />
+                )
+            }
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="AppID"
+            hasFeedback
+            className='edit-input'
+            >
+            {getFieldDecorator('AppId', {
+              rules: [{ required: true, message: '必填' }]
+
+            })(
+              <Input />
+              )}
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="AppSecret"
+            hasFeedback
+            className='edit-input'
+            >
+            {getFieldDecorator('AppSecret', {
               rules: [{ required: true, message: '必填' }]
             })(
               <Input />
-              )
-          }
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          label="AppID"
-          hasFeedback
-          className='edit-input'
-          >
-          {getFieldDecorator('AppId', {
-            rules: [{ required: true, message: '必填' }]
-
-          })(
-            <Input />
+              )}
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="Token"
+            hasFeedback
+            className='edit-input'
+            >
+            {getFieldDecorator('Token', {
+              rules: [{ required: true, message: '必填' }]
+            })(
+              <Input />
+              )}
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="EncodingAESKey"
+            hasFeedback
+            className='edit-input'
+            >
+            {getFieldDecorator('EncodingAESKey', {})(
+              <Input type="textarea" rows={4} />
             )}
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          label="AppSecret"
-          hasFeedback
-          className='edit-input'
-          >
-          {getFieldDecorator('AppSecret', {
-            rules: [{ required: true, message: '必填' }]
-          })(
-            <Input />
-            )}
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          label="Token"
-          hasFeedback
-          className='edit-input'
-          >
-          {getFieldDecorator('Token', {
-            rules: [{ required: true, message: '必填' }]
-          })(
-            <Input />
-            )}
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          label="EncodingAESKey"
-          hasFeedback
-          className='edit-input'
-          >
-          {getFieldDecorator('EncodingAESKey', {})(
-            <Input type="textarea" rows={4} />
-          )}
-        </Form.Item>
-        <Form.Item className='submit-btn'>
-          <Button type="primary" htmlType="submit">保存</Button>
-        </Form.Item>
-      </Form>
-    </Spin>
-  )
-}
+          </Form.Item>
+          <Form.Item className='submit-btn'>
+            <Button type="primary" htmlType="submit">保存</Button>
+          </Form.Item>
+        </Form>
+      </Spin>
+    )
+  }
 }
 
 
@@ -175,4 +180,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WechatAccountEditView)
+export default connect(mapStateToProps, mapDispatchToProps)(DetailEdit(WechatAccountEditView))

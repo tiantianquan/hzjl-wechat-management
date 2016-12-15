@@ -1,11 +1,13 @@
-import actions
- from '../actions'
+import actions from '../actions'
 
- let actionType = actions.wechatAccount.actionType
+let actionType = actions.category.actionType
 
 const initialState = {
-  wechatAccountList: [],
-  wechatAccountEdit: {},
+  list: [],
+  edit: {
+    EditData: {},
+    WechatAccountList: []
+  },
   isLoading: false,
   msg: {
     haveShow: true
@@ -22,7 +24,7 @@ function reducer(state = initialState, action) {
     case actionType.GET_LIST_END:
       return {
         ...state,
-        wechatAccountList: action.data,
+        list: action.data,
         isLoading: action.isLoading
       }
     case actionType.GET_LOADING:
@@ -33,20 +35,23 @@ function reducer(state = initialState, action) {
     case actionType.GET_END:
       return {
         ...state,
-        wechatAccountEdit: action.data,
+        edit: {
+          ...action.data,
+        },
         isLoading: action.isLoading
       }
     case actionType.CLEAR:
       return {
         ...state,
-        wechatAccountEdit: {}
+        edit: initialState.edit
       }
     case actionType.UPDATE_LOADING:
-      return {
+      let res = {
         ...state,
-        wechatAccountEdit:action.data ,
         isLoading: action.isLoading
       }
+      res.edit.EditData = action.data
+      return res
     case actionType.UPDATE_END:
       return {
         ...state,
@@ -57,11 +62,12 @@ function reducer(state = initialState, action) {
         }
       }
     case actionType.ADD_LOADING:
-      return {
+      res = {
         ...state,
-        wechatAccountEdit:action.data ,
         isLoading: action.isLoading
       }
+      res.edit.EditData =action.data
+      return res
     case actionType.ADD_END:
       return {
         ...state,

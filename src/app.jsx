@@ -7,7 +7,7 @@ import thunk from 'redux-thunk'
 import { Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
-import { MainView, WechatAccountListView, WechatAccountEditView } from './containers'
+import View from './containers'
 import reducers from './reducers'
 import './style/style.scss'
 
@@ -27,25 +27,30 @@ const history = syncHistoryWithStore(browserHistory, store)
 const routeConfig = [
   {
     path: '/',
-    component: MainView,
+    component: View.MainView,
     indexRoute: { component: null },
     childRoutes: [
       {
         path: 'WechatAccountList',
-        component: WechatAccountListView,
+        component: View.WechatAccountListView,
         childRoutes: [{
           path: 'Edit/:id',
-          component: WechatAccountEditView
+          component: View.WechatAccountEditView
         },{
           path:'Add',
-          component:WechatAccountEditView
+          component:View.WechatAccountEditView
         }],
       },
       {
-        path: '2',
-        component: () => (
-          <div>2</div>
-        )
+        path: 'CategoryList',
+        component:View.CategoryListView,
+        childRoutes: [{
+          path: 'Edit/:id',
+          component: View.CategoryEditView
+        },{
+          path:'Add',
+          component:View.CategoryEditView
+        }],
       },
     ],
   }

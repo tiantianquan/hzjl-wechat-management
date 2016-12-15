@@ -1,11 +1,11 @@
 import {genActionType} from './actionType.js'
 import {
-  WechatAccount  as Api
+  Category  as Api
 } from '../api'
 
-let actionType = genActionType('WechatAccount')
+let actionType = genActionType('Category')
 
-//微信账户列表
+
 function getListStart() {
   return async function (dispatch) {
     dispatch(getListLoading())
@@ -30,7 +30,6 @@ function getListEnd(data) {
 }
 
 
-//获取微信账户
 function getStart(id) {
   return async function (dispatch) {
     dispatch(getLoading())
@@ -54,7 +53,6 @@ function getEnd(data) {
   }
 }
 
-//清除页面微信账户
 function clear(data) {
   return {
     type: actionType.CLEAR,
@@ -63,7 +61,6 @@ function clear(data) {
 }
 
 
-//更新微信账户
 function updateStart(data) {
   return async function (dispatch) {
     dispatch(updateLoading(data))
@@ -89,7 +86,6 @@ function updateEnd(msg) {
   }
 }
 
-//添加微信账户
 function addStart(data) {
   return async function (dispatch) {
     dispatch(addLoading(data))

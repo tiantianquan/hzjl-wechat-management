@@ -15,27 +15,29 @@ const ListEdit = (WrapComponent) => {
     }
 
     handleCancel = () => {
-      this.props.router.push({
-        pathname: this.props.location.state.returnTo,
-        state: { showModal: false, modalTitle: '' }
-      })
+      if (!!this.state.showModal) {
+        this.props.router.push({
+          pathname: this.props.location.state.returnTo,
+          state: { showModal: false, modalTitle: '' }
+        })
+      }
     }
 
     componentWillReceiveProps(nextProps) {
       let routeState = nextProps.location.state
       if (!!routeState) {
-        this.setState({ ...routeState})
+        this.setState({ ...routeState })
+      }
+    }
+
+    render() {
+      return <WrapComponent {...this.props} handleCancel={this.handleCancel} showModal={this.state.showModal}
+        modalTitle={this.state.modalTitle} handleValidate={this.handleValidate}
+        />
     }
   }
 
-  render() {
-    return <WrapComponent {...this.props} handleCancel={this.handleCancel} showModal={this.state.showModal}
-      modalTitle={this.state.modalTitle}
-      />
-  }
-}
-
-return withRouter(InnerComponent)
+  return withRouter(InnerComponent)
 }
 
 export default ListEdit

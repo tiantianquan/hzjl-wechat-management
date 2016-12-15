@@ -10,7 +10,7 @@ import actions from '../actions'
 
 const { Column } = Table
 
-class WechatAccountListView extends Component {
+class CategoryListView extends Component {
   _commandColRender = (text, record) => (
     <span>
       <Link to={{
@@ -18,7 +18,7 @@ class WechatAccountListView extends Component {
         state: {
           showModal: true,
           returnTo: this.props.location.pathname,
-          modalTitle: '编辑微信账户信息',
+          modalTitle: '编辑分类',
           type: 'EDIT'
         }
       }}> 编辑</Link>
@@ -42,7 +42,7 @@ class WechatAccountListView extends Component {
       state: {
         showModal: true,
         returnTo: this.props.location.pathname,
-        modalTitle: '新增微信账户信息',
+        modalTitle: '新增分类',
         type: 'ADD'
       }
     })
@@ -73,23 +73,16 @@ class WechatAccountListView extends Component {
         <div className='add-btn'>
           <Button type="primary" onClick={this._handleAddBtnClick}>新增</Button>
         </div>
-        <Table dataSource={this.props.wechatAccountList}
-          loading={this.props.isLoading}
-          bordered>
+        <Table dataSource={this.props.list} bordered>
           <Column
-            title="Name"
+            title="名称"
             dataIndex="Name"
             key="Name"
             />
           <Column
-            title="AppId"
-            dataIndex="AppId"
+            title="所属微信账户"
+            dataIndex="WechatAccountName"
             key="AppId"
-            />
-          <Column
-            title="AppSecret"
-            dataIndex="AppSecret"
-            key="AppSecret"
             />
           <Column
             title="操作"
@@ -114,14 +107,14 @@ class WechatAccountListView extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    ...state.wechatAccount,
+    ...state.category,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions.wechatAccount, dispatch)
+    actions: bindActionCreators(actions.category, dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListEdit(WechatAccountListView))
+export default connect(mapStateToProps, mapDispatchToProps)(ListEdit(CategoryListView))
