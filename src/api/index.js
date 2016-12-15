@@ -21,9 +21,16 @@ class Api {
 
   static async updateWechatAccount(data) {
     var url = `api/WxAccount/Edit`
-    var res = await axios.post(this.urlPrex + url,data)
+    var res = await axios.post(this.urlPrex + url, data)
     return res.data
   }
+
+  static async addWechatAccount(data) {
+    var url = `api/WxAccount/Create`
+    var res = await axios.post(this.urlPrex + url, data)
+    return res.data
+  }
+
 }
 
 export default Api

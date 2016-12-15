@@ -1,6 +1,8 @@
 import actionType from './actionType.js'
 import Api from '../api'
-import {message} from 'antd'
+import {
+  message
+} from 'antd'
 
 
 function getWechatAccountListStart() {
@@ -83,12 +85,37 @@ function updateWechatAccountEnd(msg) {
   }
 }
 
-function updateMsgShowState(haveShow) {
-  return{
-    type:actionType.UPDATE_MSG_SHOW_STATE,
-    haveShow:haveShow 
+
+function addWechatAccountStart(data) {
+  return async function (dispatch) {
+    dispatch(addWechatAccountLoading())
+    let res = await Api.addWechatAccount(data)
+    dispatch(addWechatAccountEnd(res))
   }
-  
+}
+
+function addWechatAccountLoading(data) {
+  return {
+    type: actionType.ADD_WECHATACCOUNT_LOADING,
+    data,
+    isLoading: true
+  }
+}
+
+function addWechatAccountEnd(msg) {
+  return {
+    type: actionType.ADD_WECHATACCOUNT_END,
+    msg: msg,
+    isLoading: false
+  }
+}
+
+function updateMsgShowState(haveShow) {
+  return {
+    type: actionType.UPDATE_MSG_SHOW_STATE,
+    haveShow: haveShow
+  }
+
 }
 
 
@@ -101,6 +128,7 @@ export default {
   // getWechatAccountEnd,
   clearWechatAccount,
   updateWechatAccountStart,
+  addWechatAccountStart,
   updateMsgShowState
 }
 

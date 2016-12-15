@@ -36,6 +36,9 @@ const routeConfig = [
         childRoutes: [{
           path: 'Edit/:id',
           component: WechatAccountEditView
+        },{
+          path:'Add',
+          component:WechatAccountEditView
         }],
       },
       {

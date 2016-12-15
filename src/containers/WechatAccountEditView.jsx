@@ -6,8 +6,9 @@ import { connect } from 'react-redux'
 import actions from '../actions'
 
 @Form.create({
-  mapPropsToFields(props) {
-    return {
+  /**
+   * @param {any} props
+   * @returns
       AppId: {
         value: props.wechatAccount.AppId
       },
@@ -23,24 +24,57 @@ import actions from '../actions'
       EncodingAESKey: {
         value: props.wechatAccount.EncodingAESKey
       }
+   */
+  mapPropsToFields(props) {
+    let formData = {}
+    for (var k in props.wechatAccount) {
+      if (props.wechatAccount.hasOwnProperty(k)) {
+        formData[k] = {
+          value: props.wechatAccount[k]
+        }
+      }
     }
+    return formData
+
+
   }
 })
 class WechatAccountEditView extends Component {
-  _handleSubmit = (e) => {
-    e.preventDefault()
-    let {wechatAccount} = this.props
-    let updateData = {
-      ...wechatAccount,
+  constructor(props, context) {
+    super(props, context)
+    this.state = {
+      type: props.location.state.type
+    }
+  }
+
+  _handleAdd = () => {
+    let addData = {
       ...this.props.form.getFieldsValue()
   }
-
-    this.props.actions.updateWechatAccountStart(updateData)
-    
+    this.props.actions.addWechatAccountStart(addData)
   }
 
+_handleEdit = () => {
+  let {wechatAccount} = this.props
+  let updateData = {
+      ...wechatAccount,
+      ...this.props.form.getFieldsValue()
+}
+this.props.actions.updateWechatAccountStart(updateData)
+  }
+
+_handleSubmit = (e) => {
+  e.preventDefault()
+  if (this.state.type === 'ADD')
+    this._handleAdd()
+
+  if (this.state.type === 'EDIT')
+    this._handleEdit()
+}
+
 componentWillMount() {
-  this.props.actions.getWechatAccountStart(this.props.params.id)
+  if (this.state.type === 'EDIT')
+    this.props.actions.getWechatAccountStart(this.props.params.id)
 }
 componentWillUnmount() {
   this.props.actions.clearWechatAccount(this.props.wechatAccount)
@@ -60,11 +94,13 @@ render() {
           hasFeedback
           className='edit-input'
           >
-          {getFieldDecorator('Name', {
-            rules: [{ required: true, message: '必填' }]
-          })(
-            <Input />
-            )}
+          {
+            getFieldDecorator('Name', {
+              rules: [{ required: true, message: '必填' }]
+            })(
+              <Input />
+              )
+          }
         </Form.Item>
         <Form.Item
           labelCol={{ span: 6 }}

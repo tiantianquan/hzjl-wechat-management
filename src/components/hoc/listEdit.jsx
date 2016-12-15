@@ -4,38 +4,38 @@ import { withRouter } from 'react-router'
 
 
 
-const ListEdit = WrapComponent => {
+const ListEdit = (WrapComponent) => {
   class InnerComponent extends Component {
     constructor(props, context) {
       super(props, context);
       this.state = {
-        showModal: false
+        showModal: false,
+        modalTitle: ''
       }
     }
 
     handleCancel = () => {
-      this.props.router.push({ pathname: this.props.location.state.returnTo })
+      this.props.router.push({
+        pathname: this.props.location.state.returnTo,
+        state: { showModal: false, modalTitle: '' }
+      })
     }
-
-
 
     componentWillReceiveProps(nextProps) {
-      if (!!nextProps.location.state && !!nextProps.location.state.showModal) {
-        this.setState({ showModal: true })
-      } else {
-        this.setState({ showModal: false })
-      }
-
-
-
-    }
-
-    render() {
-      return <WrapComponent {...this.props} handleCancel={this.handleCancel} showModal={this.state.showModal} />
+      let routeState = nextProps.location.state
+      if (!!routeState) {
+        this.setState({ ...routeState})
     }
   }
 
-  return withRouter(InnerComponent)
+  render() {
+    return <WrapComponent {...this.props} handleCancel={this.handleCancel} showModal={this.state.showModal}
+      modalTitle={this.state.modalTitle}
+      />
+  }
+}
+
+return withRouter(InnerComponent)
 }
 
 export default ListEdit

@@ -6,8 +6,8 @@ const initialState = {
   wechatAccountList: [],
   wechatAccount: {},
   isLoading: false,
-  msg:{
-    haveShow:true
+  msg: {
+    haveShow: true
   }
 }
 
@@ -49,20 +49,33 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         isLoading: action.isLoading,
-        msg:{
+        msg: {
           ...action.msg,
-          haveShow:false
+          haveShow: false
         }
       }
-
-    case actionType.UPDATE_MSG_SHOW_STATE:
-    return{
-      ...state,
-      msg:{
-        ...state.msg,
-        haveShow:action.haveShow
+    case actionType.ADD_WECHATACCOUNT_LOADING:
+      return {
+        ...state,
+        isLoading: action.isLoading
       }
-    }
+    case actionType.ADD_WECHATACCOUNT_END:
+      return {
+        ...state,
+        isLoading: action.isLoading,
+        msg: {
+          ...action.msg,
+          haveShow: false
+        }
+      }
+    case actionType.UPDATE_MSG_SHOW_STATE:
+      return {
+        ...state,
+        msg: {
+          ...state.msg,
+          haveShow: action.haveShow
+        }
+      }
     default:
       return state
   }
