@@ -8,13 +8,13 @@ import { Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 import { MainView, WechatAccountListView, WechatAccountEditView } from './containers'
-import rootReducer from './reducers'
+import reducers from './reducers'
 import './style/style.scss'
 
 
 //react-router-redux
 const reducer = combineReducers({
-  rootReducer,
+  ...reducers,
   routing: routerReducer
 })
 

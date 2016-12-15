@@ -165,7 +165,7 @@ render() {
 
 function mapStateToProps(state, ownProps) {
   return {
-    ...state.rootReducer,
+    ...state.wechatAccount,
   }
 }
 

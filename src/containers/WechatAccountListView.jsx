@@ -104,7 +104,7 @@ class WxKeyListView extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    ...state.rootReducer,
+     ...state.wechatAccount,
   }
 }
 
