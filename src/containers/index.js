@@ -5,6 +5,7 @@ import CategoryListView from './categoryListView.jsx'
 import CategoryEditView from './categoryEditView.jsx'
 import NewsListView from './newsListView.jsx'
 import NewsEditView from './newsEditView.jsx'
+import EditContentView from './editContentView.jsx'
 
 export default {
   MainView,
@@ -13,5 +14,6 @@ export default {
   CategoryListView,
   CategoryEditView,
   NewsListView,
-  NewsEditView
+  NewsEditView,
+  EditContentView
 }

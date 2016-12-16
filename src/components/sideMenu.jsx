@@ -29,6 +29,7 @@ class SideMenu extends Component {
           <Menu.Item key="WechatAccountList"><Link to='/WechatAccountList'>微信账户管理</Link></Menu.Item>
           <Menu.Item key="CategoryList"><Link to='/CategoryList'>图文消息分类管理</Link></Menu.Item>
           <Menu.Item key="NewsList"><Link to='/NewsList'>图文消息管理</Link></Menu.Item>
+          <Menu.Item key="DemoEditContent"><Link to='/DemoEditContent'>编辑测试</Link></Menu.Item>
         </SubMenu>
       </Menu>
     )
