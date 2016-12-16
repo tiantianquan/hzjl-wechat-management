@@ -20,7 +20,7 @@ import actions from '../actions'
   }
 })
 @DetailEdit
-class CategoryEditView extends Component {
+class NewsEditView extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
@@ -72,12 +72,42 @@ class CategoryEditView extends Component {
           <Form.Item
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 14 }}
-            label="名称"
+            label="标题"
             hasFeedback
             className='edit-input'
             >
             {
-              getFieldDecorator('Name', {
+              getFieldDecorator('title', {
+                rules: [{ required: true, message: '必填' }]
+              })(
+                <Input />
+                )
+            }
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="描述"
+            hasFeedback
+            className='edit-input'
+            >
+            {
+              getFieldDecorator('digest', {
+                rules: [{ required: true, message: '必填' }]
+              })(
+                <Input type="textarea" rows={4}/>
+                )
+            }
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="正文内容"
+            hasFeedback
+            className='edit-input'
+            >
+            {
+              getFieldDecorator('content', {
                 rules: [{ required: true, message: '必填' }]
               })(
                 <Input />
@@ -115,14 +145,14 @@ class CategoryEditView extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    ...state.category,
+    ...state.news,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions.category, dispatch)
+    actions: bindActionCreators(actions.news, dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailEdit(CategoryEditView))
+export default connect(mapStateToProps, mapDispatchToProps)(DetailEdit(NewsEditView))

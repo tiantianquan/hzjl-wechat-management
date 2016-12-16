@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
@@ -36,20 +36,31 @@ const routeConfig = [
         childRoutes: [{
           path: 'Edit/:id',
           component: View.WechatAccountEditView
-        },{
-          path:'Add',
-          component:View.WechatAccountEditView
+        }, {
+          path: 'Add',
+          component: View.WechatAccountEditView
         }],
       },
       {
         path: 'CategoryList',
-        component:View.CategoryListView,
+        component: View.CategoryListView,
         childRoutes: [{
           path: 'Edit/:id',
           component: View.CategoryEditView
-        },{
-          path:'Add',
-          component:View.CategoryEditView
+        }, {
+          path: 'Add',
+          component: View.CategoryEditView
+        }],
+      },
+      {
+        path: 'NewsList',
+        component: View.NewsListView,
+        childRoutes: [{
+          path: 'Edit/:id',
+          component: View.NewsEditView
+        }, {
+          path: 'Add',
+          component: View.NewsEditView
         }],
       },
     ],
@@ -58,7 +69,7 @@ const routeConfig = [
 
 
 
-const App = React.createClass({
+class App extends Component {
   render() {
     return (
       <Provider store={store}>
@@ -67,7 +78,7 @@ const App = React.createClass({
       </Provider>
     )
   }
-})
+}
 
 
 const mountNode = document.querySelector("#app")

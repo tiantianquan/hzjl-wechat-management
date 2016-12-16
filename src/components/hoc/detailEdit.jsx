@@ -6,7 +6,8 @@ const DetailEdit = (WrapComponent) => {
       super(props, context);
     }
 
-    handleValidate(form) {
+    _handleValidate = () => {
+      let {form} = this.props
       let flag = true
       form.validateFields((err, values) => {
         if (err) {
@@ -16,8 +17,17 @@ const DetailEdit = (WrapComponent) => {
       return flag
     }
 
+    _handleSubmit = (e, cb) => {
+      e.preventDefault()
+      if (this._handleValidate()) {
+        cb()
+      }
+    }
+
     render() {
-      return <WrapComponent {...this.props} handleValidate={this.handleValidate} />
+      return <WrapComponent  {...this.props}
+        handleSubmit={this._handleSubmit}
+        handleValidate={this._handleValidate} />
     }
   }
 

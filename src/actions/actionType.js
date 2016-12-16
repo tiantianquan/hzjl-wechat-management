@@ -1,4 +1,4 @@
- let commonType = {
+ const commonType = {
   GET_LIST_START: 'GET_LIST_START',
   GET_LIST_LOADING: 'GET_LIST_LOADING',
   GET_LIST_END: 'GET_LIST_END',

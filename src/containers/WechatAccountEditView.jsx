@@ -38,6 +38,7 @@ import actions from '../actions'
     return formData
   }
 })
+@DetailEdit
 class WechatAccountEditView extends Component {
   constructor(props, context) {
     super(props, context)
@@ -47,34 +48,27 @@ class WechatAccountEditView extends Component {
   }
 
   _handleAdd = () => {
-    let {form} = this.props
-    if (this.props.handleValidate(form)) {
-      let addData = {
-        ...this.props.form.getFieldsValue()
-      }
-      this.props.actions.addStart(addData)
+    let addData = {
+      ...this.props.form.getFieldsValue()
     }
+    this.props.actions.addStart(addData)
   }
 
   _handleEdit = () => {
-    let {form} = this.props
-    if (this.props.handleValidate(form)) {
-      let {wechatAccountEdit} = this.props
-      let updateData = {
-        ...wechatAccountEdit,
-        ...form.getFieldsValue()
-      }
-      this.props.actions.updateStart(updateData)
+    let {wechatAccountEdit} = this.props
+    let updateData = {
+      ...wechatAccountEdit,
+      ...this.props.form.getFieldsValue()
     }
+    this.props.actions.updateStart(updateData)
   }
 
   _handleSubmit = (e) => {
-    e.preventDefault()
     if (this.state.type === 'ADD')
-      this._handleAdd()
+      this.props.handleSubmit(e, this._handleAdd)
 
     if (this.state.type === 'EDIT')
-      this._handleEdit()
+      this.props.handleSubmit(e, this._handleEdit)
   }
 
   componentWillMount() {
@@ -180,4 +174,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailEdit(WechatAccountEditView))
+export default connect(mapStateToProps, mapDispatchToProps)(WechatAccountEditView)
