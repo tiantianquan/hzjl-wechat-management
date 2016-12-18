@@ -97,7 +97,7 @@ class CategoryEditView extends Component {
               <Select>
                 {
                   this.props.edit.WechatAccountList
-                    .map(w => <Option key={w.Id} value={w.Id}>{w.Name}</Option>)
+                    .map(w => <Select.Option key={w.Id} value={w.Id}>{w.Name}</Select.Option>)
                 }
               </Select>
 

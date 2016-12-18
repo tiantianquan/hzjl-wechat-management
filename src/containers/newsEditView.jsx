@@ -23,10 +23,13 @@ import actions from '../actions'
 @DetailEdit
 class NewsEditView extends Component {
   constructor(props, context) {
+
     super(props, context)
     this.state = {
       type: props.location.state.type,
-      selectWechatAccountId: this.props.edit.EditData.WechatAccountId
+      // selectWechatAccount: this.props.edit.EditData.WechatAccountId
+      // selectWechatAccount:this.props.edit.WechatAccountList.filter(i=>i.Id===this.props.edit.EditData.WechatAccountId)
+      selectWechatAccount: {}
     }
   }
 
@@ -60,32 +63,31 @@ class NewsEditView extends Component {
     })
   }
 
-  _handleWechatAccountSelectChange = (value,option) => {
+  _handleWechatAccountSelectChange = (value, option) => {
     this.setState({
       ...this.state,
-      selectWechatAccountId: value
+      selectWechatAccount: option.props.bindItem
     })
 
     this.props.form.setFieldsValue({
       CategoryId: null
     })
 
-    console.log(option)
   }
 
   _renderCategroyOptions = () => {
     return this.props.edit.CategoryList
       .map(c => {
-        if (c.WechatAccountId == this.state.selectWechatAccountId)
+        if (c.WechatAccountId == this.state.selectWechatAccount.Id)
           return (
-            <Select.Option key={c.Id}>{c.Name}</Select.Option>
+            <Select.Option key={c.Id} value={c.Id}>{c.Name}</Select.Option>
           )
       }).filter(i => !!i)
   }
 
   _renderCityForm = () => {
     const { getFieldDecorator } = this.props.form
-    if (this.state.selectWechatAccountId == 1) {
+    if (this.state.selectWechatAccount.Id == 1) {
       return (<Form.Item
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 14 }}
@@ -97,12 +99,22 @@ class NewsEditView extends Component {
           // rules: [{ required: true, message: '必填' }]
         })(
           <Select allowClear={true}>
-            {this.props.edit.CityList.map(i => <Select.Option key={i.Id}>{i.Name}</Select.Option>)}
+            {this.props.edit.CityList.map(i => <Select.Option key={i.Id} value={i.Id}>{i.Name}</Select.Option>)}
           </Select>
           )}
       </Form.Item>)
     }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.edit.EditData.WechatAccountId !== this.props.edit.EditData.WechatAccountId)
+      this.setState({
+        ...this.state,
+        selectWechatAccount: nextProps.edit.WechatAccountList
+          .filter(i => i.Id === nextProps.edit.EditData.WechatAccountId)[0] || {}
+      })
+  }
+
 
   componentWillMount() {
     if (this.state.type === 'EDIT')
@@ -158,13 +170,13 @@ class NewsEditView extends Component {
             hasFeedback
             className='edit-input'
             >
-            {getFieldDecorator('WechatAccountI', {
-              rules: [{ required: true, message: '必填' }],
+            {getFieldDecorator('WechatAccountId', {
+              rules: [{ required: true, message: '必填', type: 'number' }],
             })(
               <Select onSelect={this._handleWechatAccountSelectChange}>
                 {
                   this.props.edit.WechatAccountList
-                    .map(w => <Select.Option bindItem={w} key={w.Id}>{w.Name}</Select.Option>)
+                    .map(w => <Select.Option bindItem={w} key={w.Id} value={w.Id}>{w.Name}</Select.Option>)
                 }
               </Select>
 
@@ -178,7 +190,7 @@ class NewsEditView extends Component {
             className='edit-input'
             >
             {getFieldDecorator('CategoryId', {
-              rules: [{ required: true, message: '必填' }]
+              rules: [{ required: true, message: '必填', type: 'number' }]
             })(
               <Select>
                 {this._renderCategroyOptions()}
