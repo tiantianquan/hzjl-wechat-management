@@ -5,9 +5,11 @@ let actionType = actions.news.actionType
 const initialState = {
   list: [],
   edit: {
-    EditData: {},
+    EditData: {
+      // WechatAccountId:0
+    },
     WechatAccountList: [],
-    NewsList: [],
+    CityList:[],
     CategoryList: [],
     PublishStateList: []
   },
