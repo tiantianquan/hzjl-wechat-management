@@ -1,25 +1,53 @@
-.container,#app,.main-view-wrapper{
+.container,
+#app,
+.main-view-wrapper {
   height: 100%;
 }
 
-.side-menu-wrapper{
+.side-menu-wrapper {
   height: 100%;
   width: 240px;
   float: left;
 }
-.content-wrapper{
+
+.content-wrapper {
   margin-left: 240px;
   // height: 100%;
 }
-.edit-input{
+
+.edit-input {
   // height: 50px !important;
 }
 
-.submit-btn{
+.submit-btn {
   text-align: center;
 }
 
-.add-btn{
+.submit-btn-item {
+  margin-right: 20px;
+}
+
+.add-btn {
   padding: 20px;
   text-align: right;
+}
+
+.content-copy {
+  width: 380px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 3px;
+  &:hover {
+    border-color: #40a5ed;
+  }
+  &:focus {
+    border-color: #40a5ed;
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(16, 142, 233, 0.2);
+  }
+  float: left;
+}
+
+.content-copy-clear-btn {
+  margin-left: 20px;
 }

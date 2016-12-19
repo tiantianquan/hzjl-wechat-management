@@ -13,7 +13,7 @@ import actions from '../actions'
     for (var k in props.edit.EditData) {
       if (props.edit.EditData.hasOwnProperty(k)) {
         formData[k] = {
-          value: props.edit.EditData[k]
+          value: typeof(props.edit.EditData[k])==='number' ? props.edit.EditData[k].toString():props.edit.EditData[k]
         }
       }
     }
@@ -30,7 +30,8 @@ class NewsEditView extends Component {
       // selectWechatAccount: this.props.edit.EditData.WechatAccountId
       // selectWechatAccount:this.props.edit.WechatAccountList.filter(i=>i.Id===this.props.edit.EditData.WechatAccountId)
       selectWechatAccount: {},
-      selectCategory: {}
+      selectCategory: {},
+      contentCopy: ''
     }
   }
 
@@ -58,14 +59,25 @@ class NewsEditView extends Component {
       this.props.handleSubmit(e, this._handleEdit)
   }
   _handleContentCopyChange = (e) => {
+    this.setState({
+      ...this.state,
+      contentCopy: e.target.value
+    })
     this.props.form.setFieldsValue({
       content: e.target.value
     })
   }
 
-  _handleContentChange = (value)=>{
-    console.log(1)
+  _handleContentCopyClearBtn = (e) => {
+    this.setState({
+      ...this.state,
+      contentCopy: ''
+    })
+    this.props.form.setFieldsValue({
+      content: ''
+    })
   }
+
 
   _handleWechatAccountSelectChange = (value, option) => {
     this.setState({
@@ -87,12 +99,13 @@ class NewsEditView extends Component {
 
   }
 
+
   _renderCategroyOptions = () => {
     return this.props.edit.CategoryList
       .map(c => {
         if (c.WechatAccountId == this.state.selectWechatAccount.Id)
           return (
-            <Select.Option bindItem={c} key={c.Id} value={c.Id}>{c.Name}</Select.Option>
+            <Select.Option bindItem={c} key={c.Id} value={c.Id.toString()}>{c.Name}</Select.Option>
           )
       }).filter(i => !!i)
   }
@@ -111,7 +124,7 @@ class NewsEditView extends Component {
           // rules: [{ required: true, message: '必填' }]
         })(
           <Select allowClear={true}>
-            {this.props.edit.CityList.map(i => <Select.Option key={i.Id} value={i.Id}>{i.Name}</Select.Option>)}
+            {this.props.edit.CityList.map(i => <Select.Option key={i.Id} value={i.Id.toString()}>{i.Name}</Select.Option>)}
           </Select>
           )}
       </Form.Item>)
@@ -120,9 +133,11 @@ class NewsEditView extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.edit.EditData.WechatAccountId !== this.props.edit.EditData.WechatAccountId
-      || nextProps.edit.EditData.CategoryId !== this.props.edit.EditData.CategoryId)
+      || nextProps.edit.EditData.CategoryId !== this.props.edit.EditData.CategoryId
+      || nextProps.edit.EditData.content !== this.props.edit.EditData.content)
       this.setState({
         ...this.state,
+        contentCopy: nextProps.edit.EditData.content,
         selectWechatAccount: nextProps.edit.WechatAccountList
           .filter(i => i.Id === nextProps.edit.EditData.WechatAccountId)[0] || {},
         selectCategory: nextProps.edit.CategoryList
@@ -191,7 +206,7 @@ class NewsEditView extends Component {
               <Select onSelect={this._handleWechatAccountSelectChange}>
                 {
                   this.props.edit.WechatAccountList
-                    .map(w => <Select.Option bindItem={w} key={w.Id} value={w.Id}>{w.Name}</Select.Option>)
+                    .map(w => <Select.Option bindItem={w} key={w.Id} value={w.Id.toString()}>{w.Name}</Select.Option>)
                 }
               </Select>
 
@@ -225,24 +240,27 @@ class NewsEditView extends Component {
             {
               getFieldDecorator('content', {
                 rules: [{ required: true, message: '必填' }],
-                
+
               })(
-                <Input onChange={this._handleContentChange} type="textarea" rows={4} readOnly={true} />
+                <Input placeholder="请在复制区域粘贴微信内容" type="textarea" rows={4} readOnly={true} />
                 )
             }
           </Form.Item>
+
+          <Form.Item className='submit-btn'>
+            {/*<Button className='submit-btn-item' htmlType="submit">保存草稿</Button>*/}
+            <Button className='submit-btn-item' type="primary" htmlType="submit">发布到微信</Button>
+          </Form.Item>
+
           <Form.Item
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 14 }}
-            label="复制窗口"
+            label="复制区域"
             hasFeedback
             className='edit-input'
             >
-            <ContentEditable ref='contentCopy' onChange={this._handleContentCopyChange} />
-          </Form.Item>
-
-          <Form.Item className='submit-btn'>
-            <Button type="primary" htmlType="submit">保存</Button>
+            <ContentEditable className={'content-copy'} html={this.state.contentCopy} onChange={this._handleContentCopyChange} />
+            <Button onClick={this._handleContentCopyClearBtn} type="default" className={'content-copy-clear-btn'} htmlType="button">清除</Button>
           </Form.Item>
         </Form>
       </Spin>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Spin, Button, Select,Checkbox } from 'antd'
+import { Form, Input, Spin, Button, Select, Checkbox } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import DetailEdit from '../components/hoc/detailEdit.jsx'
@@ -12,7 +12,7 @@ import actions from '../actions'
     for (var k in props.edit.EditData) {
       if (props.edit.EditData.hasOwnProperty(k)) {
         formData[k] = {
-          value: props.edit.EditData[k]
+          value: typeof(props.edit.EditData[k])==='number' ? props.edit.EditData[k].toString():props.edit.EditData[k]
         }
       }
     }
@@ -91,19 +91,22 @@ class CategoryEditView extends Component {
             hasFeedback
             className='edit-input'
             >
-            {getFieldDecorator('WechatAccountId', {
-              //  initialValue:1
-            })(
-              <Select>
-                {
-                  this.props.edit.WechatAccountList
-                    .map(w => <Select.Option key={w.Id} value={w.Id}>{w.Name}</Select.Option>)
-                }
-              </Select>
+            {
+              getFieldDecorator('WechatAccountId', {
+                valuePropName: 'value',
+                // initialValue: '1'
+              })(
+                <Select>
+                  {
+                    this.props.edit.WechatAccountList
+                      .map(w => <Select.Option key={w.Id} value={w.Id.toString()}>{w.Name}</Select.Option>)
+                  }
+                </Select>
 
-              )}
+                )
+            }
           </Form.Item>
-           <Form.Item
+          <Form.Item
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 14 }}
             label="是否包含城市选项"
@@ -112,10 +115,9 @@ class CategoryEditView extends Component {
             >
             {getFieldDecorator('HaveCity', {
               valuePropName: 'checked',
-
               //  initialValue:1
             })(
-                 <Checkbox></Checkbox>
+              <Checkbox></Checkbox>
               )}
           </Form.Item>
           <Form.Item className='submit-btn'>
