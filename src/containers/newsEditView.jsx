@@ -29,7 +29,8 @@ class NewsEditView extends Component {
       type: props.location.state.type,
       // selectWechatAccount: this.props.edit.EditData.WechatAccountId
       // selectWechatAccount:this.props.edit.WechatAccountList.filter(i=>i.Id===this.props.edit.EditData.WechatAccountId)
-      selectWechatAccount: {}
+      selectWechatAccount: {},
+      selectCategory: {}
     }
   }
 
@@ -57,10 +58,13 @@ class NewsEditView extends Component {
       this.props.handleSubmit(e, this._handleEdit)
   }
   _handleContentCopyChange = (e) => {
-    console.log(e.target.value)
     this.props.form.setFieldsValue({
       content: e.target.value
     })
+  }
+
+  _handleContentChange = (value)=>{
+    console.log(1)
   }
 
   _handleWechatAccountSelectChange = (value, option) => {
@@ -75,19 +79,27 @@ class NewsEditView extends Component {
 
   }
 
+  _handleCategorySelectChange = (value, option) => {
+    this.setState({
+      ...this.state,
+      selectCategory: option.props.bindItem
+    })
+
+  }
+
   _renderCategroyOptions = () => {
     return this.props.edit.CategoryList
       .map(c => {
         if (c.WechatAccountId == this.state.selectWechatAccount.Id)
           return (
-            <Select.Option key={c.Id} value={c.Id}>{c.Name}</Select.Option>
+            <Select.Option bindItem={c} key={c.Id} value={c.Id}>{c.Name}</Select.Option>
           )
       }).filter(i => !!i)
   }
 
   _renderCityForm = () => {
     const { getFieldDecorator } = this.props.form
-    if (this.state.selectWechatAccount.Id == 1) {
+    if (!!this.state.selectCategory.HaveCity) {
       return (<Form.Item
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 14 }}
@@ -107,11 +119,14 @@ class NewsEditView extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.edit.EditData.WechatAccountId !== this.props.edit.EditData.WechatAccountId)
+    if (nextProps.edit.EditData.WechatAccountId !== this.props.edit.EditData.WechatAccountId
+      || nextProps.edit.EditData.CategoryId !== this.props.edit.EditData.CategoryId)
       this.setState({
         ...this.state,
         selectWechatAccount: nextProps.edit.WechatAccountList
-          .filter(i => i.Id === nextProps.edit.EditData.WechatAccountId)[0] || {}
+          .filter(i => i.Id === nextProps.edit.EditData.WechatAccountId)[0] || {},
+        selectCategory: nextProps.edit.CategoryList
+          .filter(i => i.Id === nextProps.edit.EditData.CategoryId)[0] || {}
       })
   }
 
@@ -192,7 +207,7 @@ class NewsEditView extends Component {
             {getFieldDecorator('CategoryId', {
               rules: [{ required: true, message: '必填', type: 'number' }]
             })(
-              <Select>
+              <Select onSelect={this._handleCategorySelectChange}>
                 {this._renderCategroyOptions()}
               </Select>
               )}
@@ -209,10 +224,10 @@ class NewsEditView extends Component {
             >
             {
               getFieldDecorator('content', {
-                rules: [{ required: true, message: '必填' }]
+                rules: [{ required: true, message: '必填' }],
+                
               })(
-                <Input type="textarea" rows={4} readOnly={true} />
-                // <div contentEditable={true}></div>
+                <Input onChange={this._handleContentChange} type="textarea" rows={4} readOnly={true} />
                 )
             }
           </Form.Item>
@@ -223,7 +238,7 @@ class NewsEditView extends Component {
             hasFeedback
             className='edit-input'
             >
-            <ContentEditable onChange={this._handleContentCopyChange} />
+            <ContentEditable ref='contentCopy' onChange={this._handleContentCopyChange} />
           </Form.Item>
 
           <Form.Item className='submit-btn'>

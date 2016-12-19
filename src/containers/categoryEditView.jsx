@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Spin, Button, Select } from 'antd'
+import { Form, Input, Spin, Button, Select,Checkbox } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import DetailEdit from '../components/hoc/detailEdit.jsx'
@@ -101,6 +101,21 @@ class CategoryEditView extends Component {
                 }
               </Select>
 
+              )}
+          </Form.Item>
+           <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="是否包含城市选项"
+            hasFeedback
+            className='edit-input'
+            >
+            {getFieldDecorator('HaveCity', {
+              valuePropName: 'checked',
+
+              //  initialValue:1
+            })(
+                 <Checkbox></Checkbox>
               )}
           </Form.Item>
           <Form.Item className='submit-btn'>
