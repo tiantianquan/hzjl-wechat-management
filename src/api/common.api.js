@@ -20,23 +20,36 @@ class Common {
   }
 
   static async update(data) {
-    var url = `api/${this.apiTo}/Edit`
-    var res = await axios.post(this.urlPrex + url, data)
-    return res.data
+    try {
+      var url = `api/${this.apiTo}/Edit`
+      var res = await axios.post(this.urlPrex + url, data)
+      return res.data
+    } catch (error) {
+      return error.response.data
+    }
   }
 
   static async add(data) {
-    var url = `api/${this.apiTo}/Create`
-    var res = await axios.post(this.urlPrex + url, data)
-    return res.data
+    try {
+      var url = `api/${this.apiTo}/Create`
+      var res = await axios.post(this.urlPrex + url, data)
+      return res.data
+    } catch (error) {
+      return error.response.data
+    }
+
   }
 
   static async delete(id) {
-    var url = `api/${this.apiTo}/Delete`
-    var res = await axios.post(this.urlPrex + url, {
-      id
-    })
-    return res.data
+    try {
+      var url = `api/${this.apiTo}/Delete`
+      var res = await axios.post(this.urlPrex + url, {
+        id
+      })
+      return res.data
+    } catch (error) {
+      return error.response.data
+    }
   }
 }
 
