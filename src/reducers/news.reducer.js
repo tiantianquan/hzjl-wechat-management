@@ -3,13 +3,17 @@ import actions from '../actions'
 let actionType = actions.news.actionType
 
 const initialState = {
-  list: [],
-  edit: {
-    EditData: {
-      // WechatAccountId:0
-    },
+  list: {
+    ListData: [],
     WechatAccountList: [],
-    CityList:[],
+    CityList: [],
+    CategoryList: [],
+    TotalCount:0
+  },
+  edit: {
+    EditData: {},
+    WechatAccountList: [],
+    CityList: [],
     CategoryList: [],
     PublishStateList: []
   },
@@ -71,7 +75,7 @@ function reducer(state = initialState, action) {
         ...state,
         isLoading: action.isLoading
       }
-      res.edit.EditData =action.data
+      res.edit.EditData = action.data
       return res
     case actionType.ADD_END:
       return {

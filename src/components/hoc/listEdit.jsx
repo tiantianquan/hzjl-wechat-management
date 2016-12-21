@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { message } from 'antd'
 import { withRouter } from 'react-router'
 
 
@@ -14,13 +13,24 @@ const ListEdit = (WrapComponent) => {
       }
     }
 
-    handleCancel = () => {
+    _handleCancel = () => {
       if (!!this.state.showModal) {
         this.props.router.push({
           pathname: this.props.location.state.returnTo,
           state: { showModal: false, modalTitle: '' }
         })
       }
+    }
+
+    _handleDateColumnRender = (text, record) => {
+      let str
+      if (!!text) {
+        let date = new Date(text)
+        str = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      }
+      return (
+        <div>{str}</div>
+      )
     }
 
     componentWillReceiveProps(nextProps) {
@@ -31,8 +41,8 @@ const ListEdit = (WrapComponent) => {
     }
 
     render() {
-      return <WrapComponent {...this.props} handleCancel={this.handleCancel} showModal={this.state.showModal}
-        modalTitle={this.state.modalTitle} handleValidate={this.handleValidate}
+      return <WrapComponent {...this.props} handleCancel={this._handleCancel} showModal={this.state.showModal}
+        modalTitle={this.state.modalTitle} handleDateColumnRender={this._handleDateColumnRender}
         />
     }
   }

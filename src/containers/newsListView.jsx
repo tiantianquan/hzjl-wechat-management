@@ -11,6 +11,14 @@ import actions from '../actions'
 const { Column } = Table
 
 class NewsListView extends Component {
+  constructor(props, context) {
+    super(props, context)
+    this.state = {
+      pagination: {}
+    }
+  }
+
+
   _commandColRender = (text, record) => (
     <span>
       <Link to={{
@@ -32,7 +40,7 @@ class NewsListView extends Component {
   }
 
   _initListData = () => {
-    this.props.actions.getListStart()
+    this.props.actions.getListStart({ pageSize: 10, pageNum: 1 })
   }
 
   _handleAddBtnClick = () => {
@@ -48,6 +56,33 @@ class NewsListView extends Component {
     })
 
   }
+
+  _handleTableChange = (pagination, filters, sorter) => {
+    const pager = this.state.pagination
+    pager.current = pagination.current
+    this.setState({
+      pagination: pager,
+    })
+
+    this.props.actions.getListStart({
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current,
+      sortItem: {
+        sortField: sorter.field,
+        sortOrder: sorter.order
+      },
+      filterItem: {
+        ...filters
+      }
+    })
+  }
+
+  _createFilter = (filterlist) => {
+    return filterlist.map(i => {
+      return { text: i.Name, value: i.Name }
+    })
+  }
+
 
   componentWillMount() {
     this._initListData()
@@ -65,6 +100,12 @@ class NewsListView extends Component {
       }
       this.props.actions.updateMsgShowState(true)
     }
+
+    if (nextProps.list.TotalCount !== this.props.list.TotalCount) {
+      this.setState({
+        pagination: { ...this.state.pagination, total: nextProps.list.TotalCount }
+      })
+    }
   }
 
   render() {
@@ -73,31 +114,46 @@ class NewsListView extends Component {
         <div className='add-btn'>
           <Button type="primary" onClick={this._handleAddBtnClick}>新增</Button>
         </div>
-        <Table dataSource={this.props.list} bordered>
-          <Column
+        <Table dataSource={this.props.list.ListData}
+          pagination={this.state.pagination}
+          loading={this.props.isLoading}
+          onChange={this._handleTableChange}
+          bordered>
+          <Column width="20%"
             title="标题"
             dataIndex="title"
             key="title"
             />
-          <Column
+          <Column width="40%"
             title="描述"
             dataIndex="digest"
             key="digest"
             />
-             <Column
+          <Column
+            filters={this._createFilter(this.props.list.WechatAccountList)}
             title="所属微信账户"
             dataIndex="WechatAccountName"
-            key="AppId"
+            key="WechatAccountName"
+            sorter={true}
             />
-             <Column
+          <Column
+            filters={this._createFilter(this.props.list.CategoryList)}
+            sorter={true}
             title="分类"
             dataIndex="CategoryName"
             key="CategoryName"
             />
-             <Column
+          {/*<Column
             title="发布状态"
             dataIndex="PublishStateName"
             key="PublishStateName"
+            />*/}
+          <Column
+            title="创建时间"
+            dataIndex="CreateTime"
+            key="CreateTime"
+            sorter={true}
+            render={this.props.handleDateColumnRender}
             />
           <Column
             title="操作"

@@ -6,10 +6,10 @@ import {
 let actionType = genActionType('News')
 
 
-function getListStart() {
+function getListStart(params) {
   return async function (dispatch) {
     dispatch(getListLoading())
-    let data = await Api.getList()
+    let data = await Api.getListByParams(params)
     dispatch(getListEnd(data))
   }
 }
