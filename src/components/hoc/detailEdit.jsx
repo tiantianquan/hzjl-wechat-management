@@ -18,7 +18,8 @@ const DetailEdit = (WrapComponent) => {
       if (!flag) {
         return flag
       } else {
-        flag = this.refs.wrapComponent._handleValidate()
+        flag = !!this.refs.wrapComponent._handleValidate ?
+          this.refs.wrapComponent._handleValidate() : true
         return flag
       }
     }

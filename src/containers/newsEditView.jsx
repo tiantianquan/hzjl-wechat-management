@@ -189,7 +189,10 @@ class NewsEditView extends Component {
         uid: serverThumImg.Id,
         name: serverThumImg.OriginFileName,
         status: 'done',
-        url: serverThumImg.Path
+        url: serverThumImg.Path,
+        response: {
+          Data: serverThumImg
+        }
       }
   }
 
