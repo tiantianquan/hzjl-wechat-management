@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 const DetailEdit = (WrapComponent) => {
   return class extends Component {
     constructor(props, context) {
-      super(props, context);
+      super(props, context)
     }
 
     _handleValidate = () => {
@@ -14,7 +14,13 @@ const DetailEdit = (WrapComponent) => {
           flag = false
         }
       })
-      return flag
+
+      if (!flag) {
+        return flag
+      } else {
+        flag = this.refs.wrapComponent._handleValidate()
+        return flag
+      }
     }
 
     _handleSubmit = (e, cb) => {
@@ -25,7 +31,7 @@ const DetailEdit = (WrapComponent) => {
     }
 
     render() {
-      return <WrapComponent  {...this.props}
+      return <WrapComponent ref='wrapComponent'  {...this.props}
         handleSubmit={this._handleSubmit}
         handleValidate={this._handleValidate} />
     }

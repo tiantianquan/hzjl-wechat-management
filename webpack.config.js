@@ -9,7 +9,7 @@ const pxtorem = require('postcss-pxtorem');
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT || "8888";
 const PROXY_TARGET = 'http://localhost:9999'
-// const PROXY_TARGET = 'http://192.168.1.166:9999'
+	// const PROXY_TARGET = 'http://192.168.1.166:9999'
 
 //global css
 loaders.push({
@@ -57,7 +57,7 @@ module.exports = {
 	output: {
 		path: path.join(__dirname, 'public'),
 		//修复historyApiFallback url嵌套无用的问题
-		publicPath:'/',
+		publicPath: '/',
 		filename: 'bundle.js'
 	},
 	resolve: {
@@ -82,12 +82,16 @@ module.exports = {
 		port: PORT,
 		host: HOST,
 		proxy: {
-      '/api/**': {
-        target: PROXY_TARGET,
-        secure: false
-      },
+			'/api/**': {
+				target: PROXY_TARGET,
+				secure: false
+			},
+			'/Image/**': {
+				target: PROXY_TARGET,
+				secure: false
+			},
 			// changeOrigin: true
-    }
+		}
 
 	},
 	plugins: [

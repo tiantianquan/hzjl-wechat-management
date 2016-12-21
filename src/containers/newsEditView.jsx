@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Spin, Button, Select } from 'antd'
+import { Form, Input, Spin, Button, Select, Upload, Icon, message } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ContentEditable from 'react-contenteditable'
@@ -13,7 +13,7 @@ import actions from '../actions'
     for (var k in props.edit.EditData) {
       if (props.edit.EditData.hasOwnProperty(k)) {
         formData[k] = {
-          value: typeof(props.edit.EditData[k])==='number' ? props.edit.EditData[k].toString():props.edit.EditData[k]
+          value: typeof (props.edit.EditData[k]) === 'number' ? props.edit.EditData[k].toString() : props.edit.EditData[k]
         }
       }
     }
@@ -31,13 +31,27 @@ class NewsEditView extends Component {
       // selectWechatAccount:this.props.edit.WechatAccountList.filter(i=>i.Id===this.props.edit.EditData.WechatAccountId)
       selectWechatAccount: {},
       selectCategory: {},
-      contentCopy: ''
+      contentCopy: '',
+      thumbImg: null
     }
+  }
+
+  _handleValidate = () => {
+    if (!this.state.thumbImg) {
+      message.info('请上传图片')
+      return false
+    }
+    if (this.state.thumbImg === 'uploading') {
+      message.info('图片上传中')
+      return false
+    }
+    return true
   }
 
   _handleAdd = () => {
     let addData = {
-      ...this.props.form.getFieldsValue()
+      ...this.props.form.getFieldsValue(),
+      UploadThumbImgId: this.state.thumbImg.response.Data.Id
     }
     this.props.actions.addStart(addData)
   }
@@ -46,7 +60,8 @@ class NewsEditView extends Component {
     let {EditData} = this.props.edit
     let updateData = {
       ...EditData,
-      ...this.props.form.getFieldsValue()
+      ...this.props.form.getFieldsValue(),
+      UploadThumbImgId: this.state.thumbImg.response.Data.Id
     }
     this.props.actions.updateStart(updateData)
   }
@@ -131,17 +146,66 @@ class NewsEditView extends Component {
     }
   }
 
+  _handleUploadThumbImgChange = (item) => {
+    switch (item.file.status) {
+      case 'error':
+        this.setState({
+          ...this.state,
+          thumbImg: null
+        })
+        message.error(item.file.response.Content)
+        break
+      case 'done':
+        this.setState({
+          ...this.state,
+          thumbImg: item.file
+        })
+        message.success(item.file.response.Content)
+        break
+      case 'uploading':
+        this.setState({
+          ...this.state,
+          thumbImg: item.file
+        })
+        break
+      case 'removed':
+        this.setState({
+          ...this.state,
+          thumbImg: null
+        })
+        break
+    }
+  }
+
+  _handleUploadThumbImgRemove = (file) => {
+    // this.setState({
+    //   thumbImg: null
+    // })
+  }
+
+  _formatThumbImgObj = (serverThumImg) => {
+    if (!!serverThumImg)
+      return {
+        uid: serverThumImg.Id,
+        name: serverThumImg.OriginFileName,
+        status: 'done',
+        url: serverThumImg.Path
+      }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.edit.EditData.WechatAccountId !== this.props.edit.EditData.WechatAccountId
       || nextProps.edit.EditData.CategoryId !== this.props.edit.EditData.CategoryId
-      || nextProps.edit.EditData.content !== this.props.edit.EditData.content)
+      || nextProps.edit.EditData.content !== this.props.edit.EditData.content
+      || nextProps.edit.ThumbImg !== this.props.edit.ThumbImg)
       this.setState({
         ...this.state,
         contentCopy: nextProps.edit.EditData.content,
         selectWechatAccount: nextProps.edit.WechatAccountList
           .filter(i => i.Id === nextProps.edit.EditData.WechatAccountId)[0] || {},
         selectCategory: nextProps.edit.CategoryList
-          .filter(i => i.Id === nextProps.edit.EditData.CategoryId)[0] || {}
+          .filter(i => i.Id === nextProps.edit.EditData.CategoryId)[0] || {},
+        thumbImg: this._formatThumbImgObj(nextProps.edit.ThumbImg)
       })
   }
 
@@ -193,6 +257,30 @@ class NewsEditView extends Component {
                 )
             }
           </Form.Item>
+
+          <Form.Item
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+            label="上传题图"
+            hasFeedback
+            className='edit-input'
+            >
+            <Upload
+              action="/api/News/UploadThumbImg"
+              listType="picture-card"
+              fileList={!!this.state.thumbImg ? [this.state.thumbImg] : []}
+              // onPreview={this.handlePreview}
+              onChange={this._handleUploadThumbImgChange}
+              onRemove={this._handleUploadThumbImgRemove}
+              >
+              <div>
+                <Icon type="plus" />
+                <div className="ant-upload-text">Upload</div>
+              </div>
+            </Upload>
+          </Form.Item>
+
+
           <Form.Item
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 14 }}
@@ -201,7 +289,7 @@ class NewsEditView extends Component {
             className='edit-input'
             >
             {getFieldDecorator('WechatAccountId', {
-              rules: [{ required: true, message: '必填', type: 'number' }],
+              rules: [{ required: true, message: '必填' }],
             })(
               <Select onSelect={this._handleWechatAccountSelectChange}>
                 {
@@ -220,7 +308,7 @@ class NewsEditView extends Component {
             className='edit-input'
             >
             {getFieldDecorator('CategoryId', {
-              rules: [{ required: true, message: '必填', type: 'number' }]
+              rules: [{ required: true, message: '必填' }]
             })(
               <Select onSelect={this._handleCategorySelectChange}>
                 {this._renderCategroyOptions()}
