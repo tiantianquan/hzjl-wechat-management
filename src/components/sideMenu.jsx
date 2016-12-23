@@ -6,7 +6,6 @@ const SubMenu = Menu.SubMenu;
 class SideMenu extends Component {
   constructor(props) {
     super(props)
-    console.log(this.props.location.pathname)
     this.state = {
       current: this.props.location.pathname.split('/')[1],
     }

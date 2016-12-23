@@ -174,6 +174,8 @@ class NewsEditView extends Component {
           thumbImg: null
         })
         break
+      default:
+        break
     }
   }
 

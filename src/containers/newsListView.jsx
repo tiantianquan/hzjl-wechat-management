@@ -168,7 +168,7 @@ class NewsListView extends Component {
           onCancel={this.props.handleCancel}
           footer={null}
           maskClosable={false}
-          width={1200}
+          width={1000}
           >
           {this.props.children}
         </Modal>
