@@ -35,6 +35,12 @@ class NewsListView extends Component {
     </span>
   )
 
+  _titleColRender = (text, record) => (
+    <a href={record.url} target="blank">
+      {text}
+    </a>
+  )
+
   _handleDeleteBtnClick = (id) => {
     this.props.actions.deleteStart(id)
   }
@@ -123,6 +129,7 @@ class NewsListView extends Component {
             title="标题"
             dataIndex="title"
             key="title"
+            render={this._titleColRender}
             />
           <Column width="40%"
             title="描述"
