@@ -63,6 +63,17 @@ const routeConfig = [
           component: View.NewsEditView
         }],
       },
+        {
+        path: 'NavList',
+        component: View.NavListView,
+        childRoutes: [{
+          path: 'Edit/:id',
+          component: View.NavEditView
+        }, {
+          path: 'Add',
+          component: View.NavEditView
+        }],
+      },
       {
         path: 'DemoEditContent',
         component: View.EditContentView,
