@@ -73,7 +73,9 @@ class CategoryListView extends Component {
         <div className='add-btn'>
           <Button type="primary" onClick={this._handleAddBtnClick}>新增</Button>
         </div>
-        <Table dataSource={this.props.list} bordered>
+        <Table dataSource={this.props.list} 
+        loading={this.props.isLoading}
+        bordered>
           <Column
             title="名称"
             dataIndex="Name"

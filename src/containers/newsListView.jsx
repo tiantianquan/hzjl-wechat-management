@@ -150,6 +150,13 @@ class NewsListView extends Component {
             dataIndex="CategoryName"
             key="CategoryName"
             />
+          <Column
+            filters={this._createFilter(this.props.list.CityList)}
+            sorter={true}
+            title="城市"
+            dataIndex="CityName"
+            key="CityName"
+            />
           {/*<Column
             title="发布状态"
             dataIndex="PublishStateName"
